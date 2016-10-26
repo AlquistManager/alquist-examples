@@ -1,0 +1,8 @@
+﻿name: all_flow
+states:
+  all_intro:
+    type: message_text
+    properties:
+      text: 'Další důležitou volbou je cena vašeho telefonu.'
+    transitions:
+      next_state: 'smart_price_1'
