@@ -1,0 +1,3 @@
+2016-11-02 16:17:28,359 - Main logger - 57c29475-b498-49ec-b505-75e7daf957b8 - INFO - USER SAYS: explosm
+2016-11-02 16:17:30,883 - Main logger - 37c6367c-f342-4c57-8526-fe5c9b581baa - INFO - BOT SAYS: [{'delay': 0, 'type': 'button', 'payload': OrderedDict([('label', 'xkcd'), ('next_state', 'xkcd'), ('type', 'Main')])}, {'delay': 0, 'type': 'button', 'payload': OrderedDict([('label', 'explosm'), ('next_state', 'explosm'), ('type', 'Main')])}]
+2016-11-02 16:17:33,386 - Main logger - 37c6367c-f342-4c57-8526-fe5c9b581baa - INFO - USER SAYS: xkcd
