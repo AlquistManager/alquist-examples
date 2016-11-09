@@ -5,8 +5,17 @@ import requests
 
 
 class get_xkcd(State):
-    def get_latest(self):
-        url = "http://xkcd.com/1"
+    def get_other(self, url_ending, next_prev):
+        url = "http://xkcd.com"+url_ending
+        r = requests.get(url)
+        parsed_page = BeautifulSoup(r.content, "html.parser")
+        try:
+            previous_url = parsed_page.find("a", {"rel":next_prev})["href"]
+        except KeyError:
+            previous_url = url_ending
+        return previous_url
+
+    def get_current(self, url):
         r = requests.get(url)
         parsed_page = BeautifulSoup(r.content, "html.parser")
         comic_block = parsed_page.find("div", {"id": "comic"})
@@ -15,11 +24,24 @@ class get_xkcd(State):
         image_title = image_tag['title']
         return image_url, image_title
 
-
     def execute(self, request_data) -> dict:
-        # test if there are some answers from previous states already
+        context = request_data.get('context')
         old_response = request_data.get('response', False)
-        image_url, image_title = self.get_latest()
+        url_ending = context.get('current_comic_xkcd')
+        action = self.properties.get('action')
+        if action == "get_previous":
+            url_ending = self.get_other(url_ending, "prev")
+            url = "http://xkcd.com/"+url_ending
+        elif action == "get_next":
+            url_ending = self.get_other(url_ending, "next")
+            url = "http://xkcd.com/"+url_ending
+        elif action == "get_random":
+            url_ending = ""
+            url = "http://c.xkcd.com/random/comic" 
+        elif action == "get_current":
+            url = "http://xkcd.com/"+url_ending
+        image_url, image_title = self.get_current(url)
+        context.update({"current_comic_xkcd": url_ending})
         tag = "<img src={}> <br><p style=\"text-align:center;font-size:20px;\">{}</p>".format(image_url, image_title)
         # add response of this state to list of responses
         image = {'type': 'text', 'payload': {'text': tag}, 'delay': self.properties['delay']}
